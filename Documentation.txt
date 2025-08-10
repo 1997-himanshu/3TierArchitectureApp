@@ -25,7 +25,38 @@ Provision web-tier resources and set up an external load balancer to manage inco
 Generate an SSL certificate and apply it to the external load balancer to ensure secure communication.
 Map the domain name to the external load balancer for public accessibility.
 
-
+~~~~~~~~~~~
+Step 2
+~~~~~~~~~~~
+S3 Bucket and IAM Role Setup
+Create an S3 Bucket
+Open the Amazon S3 Console.
+Click Create Bucket.
+Enter a globally unique bucket name (e.g., demo-3tier-project).
+Choose the Region where you want to deploy (should be the same region as your EC2 instances and RDS).
+Keep the default settings for versioning and encryption unless your project needs them.
+Click Create Bucket.
+Upload Application Code
+Inside the bucket, create two folders:
+application-code/app-tier
+application-code/web-tier
+Upload the application code for each tier into their respective folders.
+App-tier folder → backend code (e.g., index.js, DbConfig.js).
+Web-tier folder → frontend code and build files.
+Ensure the folder structure in S3 matches exactly with your project repository.
+Create an IAM Role for EC2
+Go to the IAM Console → Roles → Create Role.
+Select AWS Service → EC2 as the trusted entity.
+Click Next: Permissions.
+Attach the following policies:
+AmazonS3FullAccess (or more restricted if you want to limit scope to only the required bucket).
+Any additional policies needed (e.g., CloudWatch Logs if monitoring is required).
+Click Next, give the role a name (e.g., EC2-S3AccessRole), and create the role.
+Attach the IAM Role to EC2 Instance
+Go to the EC2 Console.
+Select your EC2 instance → Actions → Security → Modify IAM Role.
+Choose the IAM role you just created (EC2-S3AccessRole).
+Save changes.
 
 ~~~~~~~~~~~
 Step 3
@@ -202,3 +233,4 @@ Next delete Route 53 record
 Next delete NAT GW
 Next delete Elastic IP. This came because of NATGW
 Next delete VPC
+
